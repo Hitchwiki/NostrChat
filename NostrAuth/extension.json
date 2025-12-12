@@ -1,0 +1,49 @@
+{
+	"name": "NostrAuth",
+	"version": "0.0.1",
+	"author": "MediaWiki Nostr Extensions",
+	"url": "https://github.com/example/mediawiki-nostr",
+	"descriptionmsg": "nostrauth-desc",
+	"license-name": "MIT",
+	"type": "other",
+	"requires": {
+		"MediaWiki": ">= 1.42.0"
+	},
+	"config": {
+		"NostrAuthEnabled": {
+			"value": false,
+			"description": "Enable Nostr authentication"
+		},
+		"NostrAllowedNIP5Domains": {
+			"value": null,
+			"description": "Array of allowed NIP-5 domains (null = no restriction)"
+		}
+	},
+	"AutoloadClasses": {
+		"NostrAuth\\Hooks": "includes/Hooks.php",
+		"NostrAuth\\SpecialNostrLogin": "includes/SpecialNostrLogin.php",
+		"NostrAuth\\AuthProvider": "includes/AuthProvider.php",
+		"NostrAuth\\NIP5Verifier": "includes/NIP5Verifier.php"
+	},
+	"SpecialPages": {
+		"NostrLogin": "NostrAuth\\SpecialNostrLogin"
+	},
+	"Hooks": {
+		"GetPreferences": "NostrAuth\\Hooks::onGetPreferences"
+	},
+	"MessagesDirs": {
+		"NostrAuth": [
+			"i18n"
+		]
+	},
+	"ResourceModules": {
+		"ext.nostrAuth": {
+			"scripts": [
+				"resources/ext.nostrAuth.js"
+			],
+			"dependencies": []
+		}
+	},
+	"manifest_version": 2
+}
+

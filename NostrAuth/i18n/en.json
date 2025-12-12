@@ -1,0 +1,15 @@
+{
+	"@metadata": {
+		"authors": [
+			"MediaWiki Nostr Extensions"
+		]
+	},
+	"nostrauth-desc": "Allow users to login with Nostr NIP-07 browser extension",
+	"nostrauth-login-title": "Login with Nostr",
+	"nostrauth-login-instructions": "Click the button below to login using your Nostr browser extension.",
+	"nostrauth-login-button": "Login with Nostr",
+	"nostrauth-npub-label": "Nostr Public Key (npub)",
+	"nostrauth-npub-help": "Your Nostr public key in bech32 format (npub1...). This will be used for authentication.",
+	"nostrauth-npub-invalid": "Invalid npub format. Must start with 'npub1' followed by 58 characters."
+}
+

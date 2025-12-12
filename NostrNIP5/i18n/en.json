@@ -1,0 +1,12 @@
+{
+	"@metadata": {
+		"authors": [
+			"MediaWiki Nostr Extensions"
+		]
+	},
+	"nostrnip5-desc": "Provides NIP-5 verification for MediaWiki users",
+	"nostrnip5-npub-label": "Nostr Public Key (npub)",
+	"nostrnip5-npub-help": "Your Nostr public key in bech32 format (npub1...). This will be used for NIP-5 verification at /.well-known/nostr.json",
+	"nostrnip5-npub-invalid": "Invalid npub format. Must start with 'npub1' followed by 58 characters."
+}
+

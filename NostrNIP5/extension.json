@@ -1,0 +1,34 @@
+{
+	"name": "NostrNIP5",
+	"version": "0.0.1",
+	"author": "MediaWiki Nostr Extensions",
+	"url": "https://github.com/example/mediawiki-nostr",
+	"descriptionmsg": "nostrnip5-desc",
+	"license-name": "MIT",
+	"type": "other",
+	"requires": {
+		"MediaWiki": ">= 1.42.0"
+	},
+	"config": {
+		"NostrNIP5Enabled": {
+			"value": true,
+			"description": "Enable NIP-5 verification endpoint"
+		}
+	},
+	"AutoloadClasses": {
+		"NostrNIP5\\Hooks": "includes/Hooks.php",
+		"NostrNIP5\\WellKnownHandler": "includes/WellKnownHandler.php",
+		"NostrNIP5\\UserPreferences": "includes/UserPreferences.php"
+	},
+	"Hooks": {
+		"BeforeInitialize": "NostrNIP5\\Hooks::onBeforeInitialize",
+		"GetPreferences": "NostrNIP5\\UserPreferences::onGetPreferences"
+	},
+	"MessagesDirs": {
+		"NostrNIP5": [
+			"i18n"
+		]
+	},
+	"manifest_version": 2
+}
+

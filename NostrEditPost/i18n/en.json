@@ -1,0 +1,9 @@
+{
+	"@metadata": {
+		"authors": [
+			"MediaWiki Nostr Extensions"
+		]
+	},
+	"nostreditpost-desc": "Posts MediaWiki edits to Nostr as kind 1 notes"
+}
+
