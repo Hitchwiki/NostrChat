@@ -24,7 +24,12 @@
 		"NostrEditPost\\NostrClient": "includes/NostrClient.php"
 	},
 	"Hooks": {
-		"PageContentSaveComplete": "NostrEditPost\\Hooks::onPageContentSaveComplete"
+		"PageContentSaveComplete": "main"
+	},
+	"HookHandlers": {
+		"main": {
+			"class": "NostrEditPost\\Hooks"
+		}
 	},
 	"MessagesDirs": {
 		"NostrEditPost": [

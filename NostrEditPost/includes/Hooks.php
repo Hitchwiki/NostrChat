@@ -6,12 +6,37 @@
  * @ingroup Extensions
  */
 
+// DEBUG: Extension file loaded
+file_put_contents('/var/log/mediawiki/nostr-file-load.log',
+	date('Y-m-d H:i:s') . " - NostrEditPost Hooks.php loaded\n",
+	FILE_APPEND | LOCK_EX);
+
 namespace NostrEditPost;
 
 use MediaWiki\Revision\RevisionRecord;
 use MediaWiki\User\UserIdentity;
 use Title;
 use WikiPage;
+
+// Global hook function for testing
+function NostrEditPostPageContentSaveComplete($wikiPage, $user, $summary, $flags, $revisionRecord, $editResult) {
+	// DEBUG: Write to file to verify hook is called
+	file_put_contents('/var/log/mediawiki/nostr-hook-debug.log',
+		date('Y-m-d H:i:s') . " - GLOBAL Hook called for page: " .
+		$wikiPage->getTitle()->getPrefixedText() . ", user: " . $user->getName() . "\n",
+		FILE_APPEND | LOCK_EX);
+
+	global $wgNostrEditPostEnabled, $wgNostrRelays;
+
+	// Create instance for deferred update
+	$instance = new Hooks();
+	$instance->handlePageContentSaveComplete($wikiPage, $user, $summary, $flags, $revisionRecord, $editResult);
+}
+
+// Debug: Write when extension loads
+file_put_contents('/var/log/mediawiki/nostr-extension-load.log',
+	date('Y-m-d H:i:s') . " - NostrEditPost extension loaded\n",
+	FILE_APPEND | LOCK_EX);
 
 class Hooks {
 	/**
@@ -25,7 +50,7 @@ class Hooks {
 	 * @param \MediaWiki\Storage\EditResult $editResult
 	 * @return bool|void
 	 */
-	public static function onPageContentSaveComplete(
+	public function onPageContentSaveComplete(
 		$wikiPage,
 		$user,
 		$summary,
@@ -33,6 +58,12 @@ class Hooks {
 		$revisionRecord,
 		$editResult
 	) {
+		// DEBUG: Write to file to verify hook is called
+		file_put_contents('/var/log/mediawiki/nostr-hook-debug.log',
+			date('Y-m-d H:i:s') . " - Hook called for page: " .
+			$wikiPage->getTitle()->getPrefixedText() . ", user: " . $user->getName() . "\n",
+			FILE_APPEND | LOCK_EX);
+
 		global $wgNostrEditPostEnabled, $wgNostrRelays;
 		
 		// Debug: Write to file to verify hook is called (with error handling)

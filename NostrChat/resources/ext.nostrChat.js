@@ -2,7 +2,6 @@
  * NostrChat - MediaWiki extension
  * Rewritten to use jQuery and OOJS instead of Alpine.js
  */
-//# sourceMappingURL=
 ( function () {
 	'use strict';
 
@@ -857,103 +856,22 @@
 		if ( this.userProfiles[ pubkey ] ) {
 			return this.userProfiles[ pubkey ].name;
 		}
-		
-		// Try to resolve from MediaWiki API (async, will update on next render)
-		this.resolveUsernameFromMediaWiki( pubkey );
-		
+
+		// Username resolution from MediaWiki API disabled to avoid API errors
+		// this.resolveUsernameFromMediaWiki( pubkey );
+
 		// Fallback to npub
 		const npub = this.hexToNpub( pubkey );
 		return npub.substring( 0, 12 ) + '...';
 	};
 	
 	/**
-	 * Resolve a pubkey to a MediaWiki username via API
-	 * Results are cached to avoid repeated API calls
+	 * Username resolution disabled to avoid API errors
+	 * This function is no longer used
 	 */
-	NostrChatWidget.prototype.resolveUsernameFromMediaWiki = function ( pubkey ) {
-		// Initialize cache if needed
-		if ( !this.usernameCache ) {
-			this.usernameCache = {};
-		}
-		
-		// Check if we're already resolving this pubkey
-		if ( this.usernameResolving && this.usernameResolving[ pubkey ] ) {
-			return; // Already in progress
-		}
-		
-		if ( !this.usernameResolving ) {
-			this.usernameResolving = {};
-		}
-		this.usernameResolving[ pubkey ] = true;
-		
-		// Check sessionStorage cache first
-		const cacheKey = 'nostr_username_' + pubkey;
-		const cached = sessionStorage.getItem( cacheKey );
-		if ( cached ) {
-			try {
-				const data = JSON.parse( cached );
-				// Cache expires after 1 hour
-				if ( data.timestamp && ( Date.now() - data.timestamp < 3600000 ) ) {
-					this.usernameCache[ pubkey ] = data.username;
-					delete this.usernameResolving[ pubkey ];
-					// Trigger UI update if we have messages
-					if ( this.messages && this.messages.length > 0 ) {
-						this.updateMessages();
-					}
-					return;
-				}
-			} catch ( e ) {
-				// Invalid cache, continue to API
-			}
-		}
-		
-		// Fetch from MediaWiki API
-		const api = new mw.Api();
-		api.get( {
-			action: 'query',
-			list: 'allusers',
-			auprop: 'options',
-			aulimit: 'max'
-		} ).done( ( data ) => {
-			// Build a map of pubkey -> username
-			const pubkeyToUsername = {};
-			
-			if ( data.query && data.query.allusers ) {
-				data.query.allusers.forEach( function ( user ) {
-					if ( user.options && user.options[ 'nostr-pubkey' ] ) {
-						const userPubkey = user.options[ 'nostr-pubkey' ].toLowerCase();
-						pubkeyToUsername[ userPubkey ] = user.name;
-					}
-				} );
-			}
-			
-			// Cache all results
-			Object.keys( pubkeyToUsername ).forEach( function ( key ) {
-				this.usernameCache[ key ] = pubkeyToUsername[ key ];
-				// Store in sessionStorage
-				sessionStorage.setItem( 'nostr_username_' + key, JSON.stringify( {
-					username: pubkeyToUsername[ key ],
-					timestamp: Date.now()
-				} ) );
-			}.bind( this ) );
-			
-			// Check if our target pubkey was found
-			const targetPubkey = pubkey.toLowerCase();
-			if ( pubkeyToUsername[ targetPubkey ] ) {
-				this.usernameCache[ pubkey ] = pubkeyToUsername[ targetPubkey ];
-			}
-			
-			delete this.usernameResolving[ pubkey ];
-			
-			// Trigger UI update
-			if ( this.messages && this.messages.length > 0 ) {
-				this.updateMessages();
-			}
-		} ).fail( ( error ) => {
-			console.error( 'NostrChat: Failed to resolve username from MediaWiki API:', error );
-			delete this.usernameResolving[ pubkey ];
-		} );
-	};
+	// NostrChatWidget.prototype.resolveUsernameFromMediaWiki = function ( pubkey ) {
+	// 	// Disabled - causes API errors
+	// };
 
 	NostrChatWidget.prototype.isSameUserAsPrevious = function ( index ) {
 		if ( index === 0 ) return false;

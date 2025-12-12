@@ -2,7 +2,7 @@
 	"name": "nostrchat",
 	"private": true,
 	"scripts": {
-		"build": "rollup -c",
+		"build": "rollup -c && node scripts/postprocess-bundle.js",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"dependencies": {

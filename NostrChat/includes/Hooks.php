@@ -6,14 +6,16 @@
  * @ingroup Extensions
  */
 
-namespace NostrChat;
-
 use MediaWiki\Config\Config;
-use MediaWiki\Output\Hook\BeforePageDisplayHook;
 use MediaWiki\Output\OutputPage;
 use MediaWiki\Skin\Skin;
 
-class Hooks implements BeforePageDisplayHook {
+// Global hook function for testing
+function NostrChatBeforePageDisplay( $out, $skin ) {
+    $out->addHTML( '<!-- NostrChat global hook called -->' );
+}
+
+class NostrChatHooks {
 	/**
 	 * Add chat widget to sidebar
 	 *
@@ -21,15 +23,18 @@ class Hooks implements BeforePageDisplayHook {
 	 * @param Skin $skin
 	 * @return void
 	 */
-	public function onBeforePageDisplay( $out, $skin ): void {
+	public static function onBeforePageDisplay( $out, $skin ): void {
+		// DEBUG: Always add a test element to see if hook is called
+		error_log( 'NostrChat hook called for page: ' . $out->getTitle()->getPrefixedText() );
+		$out->addHTML( '<!-- NostrChat hook called -->' );
 		$config = $out->getConfig();
-		
+
 		// Check if chat is enabled
 		$enabled = $config->get( 'NostrChatEnabled' );
 		if ( !$enabled ) {
 			return;
 		}
-		
+
 		// Only add to Vector skin (or compatible skins)
 		$skinName = $skin->getSkinName();
 		if ( $skinName !== 'vector' && $skinName !== 'vector-2022' ) {
